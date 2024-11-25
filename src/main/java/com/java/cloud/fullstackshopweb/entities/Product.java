@@ -1,8 +1,10 @@
 package com.java.cloud.fullstackshopweb.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.Instant;
+import java.util.List;
 
 @Entity
 @Table(name = "Product")
@@ -19,7 +21,15 @@ public class Product {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cat_id", nullable = false)
+    @JsonIgnore
     private Category category;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<ImageProduct> images;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Order_Details> orderDetails;
 
     public Product() {
     }
@@ -97,5 +107,17 @@ public class Product {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public Integer getCatId() {
+        return category != null ? category.getId() : null;
+    }
+
+    public List<ImageProduct> getImages() {
+        return images;
+    }
+
+    public void setImages(List<ImageProduct> images) {
+        this.images = images;
     }
 }

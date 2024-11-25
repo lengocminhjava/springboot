@@ -1,6 +1,9 @@
 package com.java.cloud.fullstackshopweb.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table
@@ -15,6 +18,9 @@ public class Category {
 
     @Column(name = "description")
     private String description;
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Product> products;
 
     public Category() {
     }
@@ -49,4 +55,11 @@ public class Category {
         this.description = description;
     }
 
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
 }
